@@ -1,48 +1,76 @@
 // IIFE - Immediately Invoked Function Expression
 (function () {
-	var contador = 0;
-
-	var cargarPagina = function () {
-		// Envío de Twitter
-		$("#twitter-form").submit(agregarToDo);
-		$("#message").keyup(validarContenido);
-	};
-
-	var agregarToDo = function (e) {
-		e.preventDefault();
-		// Para obtener los datos
-		var $contenedor = $("#posts");
-		var $mensajeContenedor = $("#message");
-		var $botonAgregar = $("#add-button");
-		var mensaje = $mensajeContenedor.val();
 
 
-		// Para crear elementos
-		var $postContenedor = $("<article />", { "class": "jumbotron" });
-		var $postTexto = $("<label />");
+  var contador = 140;
 
-		var identificador = "marcador-" + contador;
+  $("#character").text(contador);
 
-		// Para personalizar elementos
+  var cargarPagina = function () {
+    //Eventos
+    $("#twitter-form").submit(agregarTweet);
+    $("#message").keyup(validarNumeroDeCaracteres);
+    $("#message").keyup(caracteresRestantes);
+    // $("#message").keyup(colorAlerta);
+  };
 
-		$postTexto.attr("for", identificador);
-		$postTexto.text(mensaje);
+  var agregarTweet = function (e) {
+    e.preventDefault();
+    // Obtener elementos del DOM
+    var $botonAgregar= $("#add-button");
+    var $mensajeContenedor = $("#message");
+    var $publicaciones = $("#posts");
+    var mensaje = $mensajeContenedor.val();
 
-		// Para agregarlos al DOM
-		$postContenedor.append($postTexto);
-		$contenedor.prepend($postContenedor);
+    //Crear elementos del DOM
+    var $contenedorPublicacion = $("<div class='jumbotron'/>");
+    var $parrafo = $("<p />");
 
-		// Para borrar el contenido del textarea
-		$mensajeContenedor.val("");
+    //Agregar elementos
+    $parrafo.text(mensaje);
+    $contenedorPublicacion.append($parrafo);
+    $publicaciones.prepend($contenedorPublicacion);
 
-		contador++;
-	};
+    // Limpiar textArea
+    $mensajeContenedor.val(" ");
+    $botonAgregar.attr("disabled", true);
+    contador = 140;
+    $("#character").text(contador);
+  };
 
-    //Para eliminar el tweet creado
-	var eliminarToDo = function () {
-		$(this).parent().remove();
-	};
+  var validarNumeroDeCaracteres = function () {
+    var $botonAgregar = $("#add-button");
+    if ($(this).val().trim().length > 140) {
+      $("#character").text(contador);
+      contador--;
+      $botonAgregar.attr("disabled", true);
+    } else if ($(this).val().trim().length > 0){
+      $botonAgregar.removeAttr("disabled");
+    } else {
+      $botonAgregar.attr("disabled", true);
+    }
+  };
 
-	// Cuando carga la página
-	$(document).ready(cargarPagina);
+  var caracteresRestantes = function () {
+    var caracteresLimite = 0;
+    var caracteresMaximos = 140;
+    caracteresLimite = $("#message").val().length;
+
+    var totalCaracteres = caracteresMaximos - caracteresLimite;
+
+    $("#character").text(totalCaracteres);
+  };
+
+  // var colorAlerta = function() {
+  //   var $imprContador = $("#alerta");
+  //   if($(this).val().trim().length > 129) {
+  //     $imprContador.css("color", "red");
+  //   } else if ($(this).val().trim().length > 119) {
+  //     $imprContador.css("color", "orange");
+  //   }
+  // };
+
+
+  $(document).ready(cargarPagina);
+
 })();
