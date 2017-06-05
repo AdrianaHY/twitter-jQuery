@@ -11,7 +11,7 @@
     $("#twitter-form").submit(agregarTweet);
     $("#message").keyup(validarNumeroDeCaracteres);
     $("#message").keyup(caracteresRestantes);
-    // $("#message").keyup(colorAlerta);
+    // $("#message").keyup(cambiarColor);
   };
 
   var agregarTweet = function (e) {
@@ -59,16 +59,21 @@
     var totalCaracteres = caracteresMaximos - caracteresLimite;
 
     $("#character").text(totalCaracteres);
+
+		if (totalCaracteres == 120 ){
+			$("#character").addClass("label-success");
+		} if (totalCaracteres == 130){
+			$("#character").removeClass("label-success").addClass("label-warning");
+		} if (totalCaracteres >=141){
+			$botonAgregar.attr("disabled", true);
+			$("#character").removeClass("label-warning").addClass("label-danger");
+		} if (totalCaracteres < 140){
+			$("#character").removeClass("label-danger").addClass("label-warning");
+		} if (totalCaracteres <130){
+			$("#character").removeClass("label-warning").addClass("label-success");
+}
   };
 
-  // var colorAlerta = function() {
-  //   var $imprContador = $("#alerta");
-  //   if($(this).val().trim().length > 129) {
-  //     $imprContador.css("color", "red");
-  //   } else if ($(this).val().trim().length > 119) {
-  //     $imprContador.css("color", "orange");
-  //   }
-  // };
 
 
   $(document).ready(cargarPagina);
